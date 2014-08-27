@@ -42,11 +42,7 @@ end
 
 def get_actor_info(actor_id)
   query = %Q{
-    SELECT actors.id, actors.name, movies.id AS movie_id,
-    cast_members.character, movies.title AS movie
-    FROM actors
-    JOIN cast_members ON cast_members.actor_id = actors.id
-    JOIN movies ON cast_members.movie_id = movies.id
+    SELECT * FROM actor_characters
     WHERE actors.id = $1;
   }
 

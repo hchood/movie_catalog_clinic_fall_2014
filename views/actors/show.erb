@@ -12,7 +12,7 @@
     <% @characters.each do |character| %>
       <tr>
         <td><a href="/movies/<%= character['movie_id'] %>"><%= character['movie'] %></a></td>
-        <td><%= character['character'] %></td>
+        <td><%= character['role'] %></td>
       </tr>
     <% end %>
   </tbody>
