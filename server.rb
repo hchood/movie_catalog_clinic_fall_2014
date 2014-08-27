@@ -7,6 +7,12 @@ require 'pg'
 # Visiting /actors will show a list of actors, sorted alphabetically by name.
 # Each actor name is a link to the details page for that actor.
 
+# USER VIEWS AN ACTOR'S PAGE:
+# Visiting /actors/:id will show the details for a given actor.
+# This page should contain a list of movies that the actor has starred in
+# and what their role was.
+# Each movie should link to the details page for that movie.
+
 #####################################
               # METHODS
 #####################################
@@ -34,6 +40,23 @@ def get_all_actors
   results.to_a
 end
 
+def get_actor_info(actor_id)
+  query = %Q{
+    SELECT actors.id, actors.name, movies.id AS movie_id,
+    cast_members.character, movies.title AS movie
+    FROM actors
+    JOIN cast_members ON cast_members.actor_id = actors.id
+    JOIN movies ON cast_members.movie_id = movies.id
+    WHERE actors.id = $1;
+  }
+
+  results = db_connection do |conn|
+    conn.exec_params(query, [actor_id])
+  end
+
+  results.to_a
+end
+
 #####################################
               # ROUTES
 #####################################
@@ -43,3 +66,18 @@ get '/actors' do
 
   erb :'actors/index'
 end
+
+get '/actors/:id' do
+  @actor_info = get_actor_info(params[:id])
+
+  erb :'actors/show'
+end
+
+
+
+
+
+
+
+
+
