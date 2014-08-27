@@ -68,7 +68,11 @@ get '/actors' do
 end
 
 get '/actors/:id' do
-  @actor_info = get_actor_info(params[:id])
+  @characters = get_actor_info(params[:id])
+  @actor = {
+    name: @characters[0]['name'],
+    id: @characters[0]['id']
+  }
 
   erb :'actors/show'
 end
