@@ -70,10 +70,10 @@ def get_actor_info(actor_id)
   results.to_a
 end
 
-def get_all_movies
+def get_all_movies(order_param)
   query = %Q{
     SELECT * FROM movie_information
-    ORDER BY title;
+    ORDER BY #{order_param};
   }
 
   results = db_connection do |conn|
@@ -117,7 +117,7 @@ get '/actors/:id' do
 end
 
 get '/movies' do
-  @movies = get_all_movies
+  @movies = get_all_movies(params[:order] || 'title')
 
   erb :'movies/index'
 end
