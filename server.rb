@@ -143,8 +143,8 @@ get '/movies' do
 
   @page_no = (params[:page] || 1).to_i
   offset = (@page_no - 1) * 20
-  order_param = params[:order] || 'title'
-  @movies = get_all_movies(order_param, offset)
+  @order_param = params[:order] || 'title'
+  @movies = get_all_movies(@order_param, offset)
 
   erb :'movies/index'
 end
