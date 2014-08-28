@@ -30,6 +30,11 @@ require 'pg'
 # The user should be able to sort by year released or rating
 # by visiting /movies?order=year or /movies?order=rating
 
+# MOVIES AND ACTORS ARE PAGINATED:
+# Paginate the /movies and /actors page using the LIMIT and OFFSET clauses in PostgreSQL.
+# Each page should show up to 20 entries at a time. Visiting /movies?page=2 should show
+# the next 20 movies.
+
 #####################################
               # METHODS
 #####################################
@@ -96,6 +101,16 @@ def get_movie_info(movie_id)
   results.to_a
 end
 
+def count_movies
+  query = "SELECT COUNT(*) FROM movies;"
+
+  count = db_connection do |conn|
+    conn.exec(query)
+  end
+
+  count.to_a.first["count"].to_i
+end
+
 #####################################
               # ROUTES
 #####################################
@@ -117,6 +132,15 @@ get '/actors/:id' do
 end
 
 get '/movies' do
+  movie_count = count_movies
+
+  if movie_count % 20 == 0
+    @last_page = movie_count / 20
+  else
+    @last_page = movie_count / 20 + 1
+  end
+
+  @page_no = params[:page].to_i || 1
   @movies = get_all_movies(params[:order] || 'title')
 
   erb :'movies/index'

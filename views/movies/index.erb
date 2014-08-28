@@ -1,5 +1,14 @@
 <h3>All the Movies</h3>
 
+<div>
+  <% if @page_no > 1 %>
+    <a href="/movies?page=<%= @page_no - 1 %>">Previous</a>
+  <% end %>
+  <% if @page_no < @last_page %>
+    <a href="/movies?page=<%= @page_no + 1 %>">Next</a>
+  <% end %>
+</div>
+
 <table>
   <thead>
     <tr>
