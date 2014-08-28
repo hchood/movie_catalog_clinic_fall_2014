@@ -1,0 +1,42 @@
+<h3><%= @movie[:title] %></h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Year</th>
+      <th>Genre</th>
+      <th>Studio</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td><%= @movie[:title] %></td>
+      <td><%= @movie[:year] %></td>
+      <td><%= @movie[:genre] %></td>
+      <td><%= @movie[:studio] %></td>
+    </tr>
+  </tbody>
+</table>
+
+
+<h4>Cast</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>Actor</th>
+      <th>Role</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @cast_members.each do |cast_member| %>
+      <tr>
+        <td><a href="/actors/<%= cast_member['actor_id'] %>"><%= cast_member['actor'] %></a></td>
+        <td><%= cast_member['role'] %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

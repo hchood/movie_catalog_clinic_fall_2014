@@ -19,6 +19,12 @@ require 'pg'
 # and the studio that produced it. Each movie title is a link to the details page
 # for that movie.
 
+# USER VIEWS A MOVIE'S PAGE:
+# Visiting /movies/:id will show the details for the movie.
+# This page should contain information about the movie (including genre and studio)
+# as well as a list of all of the actors and their roles.
+# Each actor name is a link to the details page for that actor.
+
 #####################################
               # METHODS
 #####################################
@@ -75,6 +81,25 @@ def get_all_movies
   results.to_a
 end
 
+def get_movie_info(movie_id)
+  query = %Q{
+    SELECT movies.title, movies.year, movies.id, movies.rating, genres.name AS genre, studios.name AS studio,
+    actors.id AS actor_id, actors.name AS actor, cast_members.character AS role
+    FROM movies
+    JOIN genres ON genres.id = movies.genre_id
+    JOIN studios ON studios.id = movies.studio_id
+    JOIN cast_members ON cast_members.movie_id = movies.id
+    JOIN actors ON actors.id = cast_members.actor_id
+    WHERE movies.id = $1;
+  }
+
+  results = db_connection do |conn|
+    conn.exec_params(query, [movie_id])
+  end
+
+  results.to_a
+end
+
 #####################################
               # ROUTES
 #####################################
@@ -101,6 +126,19 @@ get '/movies' do
   erb :'movies/index'
 end
 
+get '/movies/:id' do
+  @cast_members = get_movie_info(params[:id])
+
+  @movie = {
+    id: @cast_members[0]['id'],
+    title: @cast_members[0]['title'],
+    year: @cast_members[0]['year'],
+    genre: @cast_members[0]['genre'],
+    studio: @cast_members[0]['studio']
+  }
+
+  erb :'movies/show'
+end
 
 
 
