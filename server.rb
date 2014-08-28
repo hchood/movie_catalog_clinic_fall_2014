@@ -25,6 +25,11 @@ require 'pg'
 # as well as a list of all of the actors and their roles.
 # Each actor name is a link to the details page for that actor.
 
+# USER SORTS MOVIES:
+# Allow different orderings for the /movies page.
+# The user should be able to sort by year released or rating
+# by visiting /movies?order=year or /movies?order=rating
+
 #####################################
               # METHODS
 #####################################
