@@ -75,10 +75,11 @@ def get_actor_info(actor_id)
   results.to_a
 end
 
-def get_all_movies(order_param)
+def get_all_movies(order_param, offset)
   query = %Q{
     SELECT * FROM movie_information
-    ORDER BY #{order_param};
+    ORDER BY #{order_param}
+    LIMIT 20 OFFSET #{offset};
   }
 
   results = db_connection do |conn|
@@ -140,8 +141,10 @@ get '/movies' do
     @last_page = movie_count / 20 + 1
   end
 
-  @page_no = params[:page].to_i || 1
-  @movies = get_all_movies(params[:order] || 'title')
+  @page_no = (params[:page] || 1).to_i
+  offset = (@page_no - 1) * 20
+  order_param = params[:order] || 'title'
+  @movies = get_all_movies(order_param, offset)
 
   erb :'movies/index'
 end
