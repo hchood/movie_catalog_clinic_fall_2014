@@ -13,6 +13,12 @@ require 'pg'
 # and what their role was.
 # Each movie should link to the details page for that movie.
 
+# USER VIEWS A LIST OF MOVIES:
+# Visiting /movies will show a table of movies, sorted alphabetically by title.
+# The table includes the movie title, the year it was released, the rating, the genre,
+# and the studio that produced it. Each movie title is a link to the details page
+# for that movie.
+
 #####################################
               # METHODS
 #####################################
@@ -53,6 +59,22 @@ def get_actor_info(actor_id)
   results.to_a
 end
 
+def get_all_movies
+  query = %Q{
+    SELECT movies.title, movies.year, movies.id, movies.rating, genres.name AS genre, studios.name AS studio
+    FROM movies
+    JOIN genres ON genres.id = movies.genre_id
+    JOIN studios ON studios.id = movies.studio_id
+    ORDER BY title;
+  }
+
+  results = db_connection do |conn|
+    conn.exec(query)
+  end
+
+  results.to_a
+end
+
 #####################################
               # ROUTES
 #####################################
@@ -71,6 +93,12 @@ get '/actors/:id' do
   }
 
   erb :'actors/show'
+end
+
+get '/movies' do
+  @movies = get_all_movies
+
+  erb :'movies/index'
 end
 
 
