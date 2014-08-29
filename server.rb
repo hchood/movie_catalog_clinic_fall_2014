@@ -41,6 +41,11 @@ require 'pg'
 # that have the phrase troll 2 in the title or synopsis.
 # This can be accomplished using the LIKE and ILIKE operators in PostgreSQL.
 
+# USER SEARCHES ACTORS:
+# Add a search feature for /actors that searches through the actor
+# name as well as their roles that they played (found in the
+# cast_members table).
+
 #####################################
               # METHODS
 #####################################
