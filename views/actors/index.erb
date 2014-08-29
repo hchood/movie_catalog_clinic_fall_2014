@@ -1,5 +1,10 @@
 <h3>All the Actors</h3>
 
+<form action='/actors' method='get'>
+  <input type='search' name='query'>
+  <input type='submit' value='Search'>
+</form>
+
 <ul>
   <% @actors.each do |actor| %>
     <li>
