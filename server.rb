@@ -60,14 +60,15 @@ def db_connection
   end
 end
 
-def get_all_actors
+def get_all_actors(search_term)
   query = %Q{
-    SELECT * FROM actors
+    SELECT * FROM actor_characters
+    WHERE name ILIKE $1 OR role ILIKE $1
     ORDER BY name;
   }
 
   results = db_connection do |conn|
-    conn.exec(query)
+    conn.exec_params(query, ["%#{search_term}%"])
   end
 
   results.to_a
@@ -129,7 +130,7 @@ end
 #####################################
 
 get '/actors' do
-  @actors = get_all_actors
+  @actors = get_all_actors(params[:query])
 
   erb :'actors/index'
 end
