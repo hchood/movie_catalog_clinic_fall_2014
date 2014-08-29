@@ -7,10 +7,19 @@
 
 <div>
   <% if @page_no > 1 %>
-    <a href="/movies?page=<%= @page_no - 1 %>&order=<%= @order_param %>">Previous</a>
+    <% if !params[:query] %>
+      <a href="<%= "/movies?page=#{@page_no - 1}&order=#{@order_param}" %>">Previous</a>
+    <% else %>
+      <a href="<%= "/movies?page=#{@page_no - 1}&order=#{@order_param}&query=#{params[:query]}" %>">Previous</a>
+    <% end %>
   <% end %>
+
   <% if @page_no < @last_page %>
-    <a href="/movies?page=<%= @page_no + 1 %>&order=<%= @order_param %>">Next</a>
+    <% if !params[:query] %>
+      <a href="<%= "/movies?page=#{@page_no + 1}&order=#{@order_param}" %>">Next</a>
+    <% else %>
+      <a href="<%= "/movies?page=#{@page_no + 1}&order=#{@order_param}&query=#{params[:query]}" %>">Next</a>
+    <% end %>
   <% end %>
 </div>
 
