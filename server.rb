@@ -81,15 +81,16 @@ def get_actor_info(actor_id)
   results.to_a
 end
 
-def get_all_movies(order_param, offset)
+def get_all_movies(order_param, offset, search_term)
   query = %Q{
     SELECT * FROM movie_information
+    WHERE title ILIKE $1 or synopsis ILIKE $1
     ORDER BY #{order_param}
     LIMIT 20 OFFSET #{offset};
   }
 
   results = db_connection do |conn|
-    conn.exec(query)
+    conn.exec_params(query, ["%#{search_term}%"])
   end
 
   results.to_a
@@ -150,7 +151,7 @@ get '/movies' do
   @page_no = (params[:page] || 1).to_i
   offset = (@page_no - 1) * 20
   @order_param = params[:order] || 'title'
-  @movies = get_all_movies(@order_param, offset)
+  @movies = get_all_movies(@order_param, offset, params[:query])
 
   erb :'movies/index'
 end
