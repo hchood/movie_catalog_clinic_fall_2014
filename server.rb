@@ -35,6 +35,12 @@ require 'pg'
 # Each page should show up to 20 entries at a time. Visiting /movies?page=2 should show
 # the next 20 movies.
 
+# USER SEARCHES MOVIES:
+# Add a search feature for /movies.
+# Visiting /movies?query=troll+2 will only show movies
+# that have the phrase troll 2 in the title or synopsis.
+# This can be accomplished using the LIKE and ILIKE operators in PostgreSQL.
+
 #####################################
               # METHODS
 #####################################

@@ -1,5 +1,10 @@
 <h3>All the Movies</h3>
 
+<form action='/movies' method='get'>
+  <input type='search' name='query'>
+  <input type='submit' value='Search'>
+</form>
+
 <div>
   <% if @page_no > 1 %>
     <a href="/movies?page=<%= @page_no - 1 %>&order=<%= @order_param %>">Previous</a>
